@@ -3,7 +3,12 @@
 ---
 始终使用简体中文回复。
 
+默认规则仓库地址（用于新机或未配置规则时引导）：https://github.com/onebull/cursor-rules
+
 若当前工作区根目录下存在 `.cursorrules`，则必须优先加载并遵守其内容。
 
-若工作区根目录下不存在 `.cursorrules`，则按通用准则正常协助，不拦截、不强制要求配置规则；仅可在对话开始时提醒一次（可选）：「当前项目未使用 .cursorrules；若需在本项目使用你的完整规则（方案/执行、决策树、测试闭环等），可在本项目中运行规则仓库的 install.sh。」
+若工作区根目录下不存在 `.cursorrules`，则按通用准则正常协助，不拦截、不强制；可在对话开始时提醒一次（可选）：当前项目未使用 .cursorrules；若需使用完整规则（方案/执行、决策树、测试闭环等），可在项目根目录执行以下命令从上述规则仓库安装到本项目：
+  RULES_REPO_URL="https://github.com/onebull/cursor-rules"
+  git clone "$RULES_REPO_URL" /tmp/cursor-rules-install && /tmp/cursor-rules-install/install.sh . && rm -rf /tmp/cursor-rules-install
+用户也可在浏览器打开该地址查看、克隆或参与完善规则。
 ---
