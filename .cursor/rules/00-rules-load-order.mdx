@@ -1,0 +1,25 @@
+# 规则加载顺序
+
+> **适用范围**：安装本规则仓库后的任意项目。  
+> **目的**：明确 Agent 应按何种顺序加载规则，避免遗漏或冲突。
+
+---
+
+## 建议加载顺序
+
+1. **根 `.cursorrules`** — 全局核心行为准则（方案优先、决策树、Memory Bank、work 门禁、环境识别、Agent 协议）。
+2. **`.cursor/rules/` 通用规则**（建议按以下顺序被引用或加载）：
+   - `memory-bank-workflow.mdx` — 任务前读 memory、任务后更新。
+   - `docs-governance.mdx` — 文档创建时机、临时文件清理、INDEX 更新。
+   - `agent-mcp-workflow.mdx` — PRD/设计要点、产物落档、Tasks MCP。
+   - `cursor-usage.mdx` — Composer/Chat/Plan、@ 引用、何时新对话。
+   - `layered-rules-extension.mdx` — 分层规则扩展目录与导航。
+3. **项目特定规则** — 若项目在 `.cursor/rules/` 下另有按功能/子项目划分的规则（如 `20-backend-api.mdx`、`30-frontend-react.mdx` 等），根据当前工作目录或用户指定加载对应文件。
+4. **用户指令** — 具体任务要求，优先级最高，可覆盖上述规则。
+
+---
+
+## 说明
+
+- 本仓库 `install.sh` 会复制 `.cursorrules` 与 `.cursor/` 到目标项目；安装后 Cursor 会按项目内实际存在的规则文件加载，本顺序供项目维护者与 Agent 参考。
+- 若项目有「规则映射」文档（如 `00-project-rules-mapping.mdx`），以该项目文档为准；本文件为通用最小顺序。
