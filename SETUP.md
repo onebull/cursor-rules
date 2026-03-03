@@ -50,3 +50,76 @@ git config --global user.name "你的名字"
 
 - **写权限**：在 GitHub 仓库页 → **Settings** → **Collaborators** → 添加对方账号，对方即可直接 push。
 - **无写权限**：对方 fork 你的仓库，改完提 PR；你合并后，你的展示地址即更新，其它机器 `git pull` 或重新执行安装命令即可同步。
+
+---
+
+## 分层规则体系说明
+
+本仓库支持**三层规则体系**，规则越往下越具体，越往上越通用：
+
+```
+根 .cursorrules                   ← 第一层：全局核心行为准则
+  └── project/.cursorrules        ← 第二层：项目级标准（可选）
+        └── .cursor/rules/*.mdx   ← 第三层：功能模块分层规则（按需创建）
+```
+
+### 第一层：`.cursorrules`（随本仓库提供）
+
+全局核心行为准则，适用于所有项目：
+
+- 语言 / 方案优先 / 决策树 / 原子任务测试
+- Memory Bank（跨会话防断片）
+- 工作日志门禁 / 环境管理
+- Agent 全自动执行协议
+
+### 第二层：`project/.cursorrules`（项目自建）
+
+项目级开发标准，在安装完第一层规则后，可在项目根目录创建：
+
+```markdown
+# 项目开发标准规范
+
+> 引用：必须先遵循根 .cursorrules 核心规则
+
+## 规则体系架构
+[说明三层结构]
+
+## 目录职能与管理
+[项目特定目录约定]
+
+## 功能开发流程
+[项目特定开发流程]
+
+## 环境管理规范
+[项目特定环境配置]
+```
+
+### 第三层：`.cursor/rules/*.mdx`（按需扩展）
+
+功能模块分层规则，见 `.cursor/rules/layered-rules-extension.mdx` 中的完整扩展目录。
+
+**快速上手**：
+
+```bash
+# 查看可扩展的规则目录
+cat .cursor/rules/layered-rules-extension.mdx
+
+# 按需创建具体规则文件（示例）
+cp .cursor/rules/layered-rules-extension.mdx .cursor/rules/20-backend-api.mdx
+# 然后编辑，将扩展提示替换为具体约束
+```
+
+### install.sh 安装内容
+
+执行 `install.sh` 后，以下文件会被复制到目标项目：
+
+| 文件 | 说明 |
+|------|------|
+| `.cursorrules` | 第一层全局规则（核心） |
+| `.cursor/agent-master-prompt.md` | Ctrl+I Agent 执行模板 |
+| `.cursor/rules/memory-bank-workflow.mdx` | Memory Bank 工作流规范 |
+| `.cursor/rules/agent-mcp-workflow.mdx` | Agent MCP 自动选用规范 |
+| `.cursor/rules/docs-governance.mdx` | 文档治理与生命周期规范 |
+| `.cursor/rules/layered-rules-extension.mdx` | 分层规则扩展目录（导航） |
+
+安装后按需创建第二层 `project/.cursorrules` 和第三层具体规则文件。

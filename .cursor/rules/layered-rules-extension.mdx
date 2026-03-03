@@ -1,0 +1,271 @@
+# 分层规则扩展目录
+
+> 本文件是**扩展导航**，不包含具体约束。
+> 目的：为使用者提供「可以扩展哪些维度」的地图，按需在 `.cursor/rules/` 下创建对应规则文件即可。
+
+---
+
+## 一、分层规则体系概述
+
+```
+根 .cursorrules                ← 全局核心行为准则（语言/方案优先/决策树/Memory Bank/执行协议）
+  └── project/.cursorrules    ← 项目级标准（目录约定/开发流程/交付门槛）[可选]
+        └── .cursor/rules/    ← 功能模块分层规则（按数字前缀编号，按需创建）
+```
+
+**约定**：
+- 规则文件以数字前缀排序（如 `20-backend-api.mdx`、`35-frontend.mdx`）
+- 数字段按关注域分组，便于查找与扩展
+- 每个文件聚焦单一关注域，避免跨域混写
+
+---
+
+## 二、扩展目录（按关注域）
+
+### 20–29 后端核心
+
+```
+20-backend-api.mdx          # API 设计规范
+                            # → REST/GraphQL/RPC 风格、版本策略、状态码、分页、错误模型
+                            # → 幂等性、限流、鉴权中间件约定
+
+21-backend-data.mdx         # 数据层规范
+                            # → ORM/查询约定、事务边界、软删除、索引设计
+                            # → 数据库迁移约定（建表/改表/必备表检查/一键迁移）
+
+22-backend-cache.mdx        # 缓存与消息
+                            # → Redis 使用约定（Key 命名/TTL/Lua 脚本/锁）
+                            # → 消息队列（Queue 命名/重试/死信/消费幂等）
+
+23-backend-platform.mdx     # 平台服约定
+                            # → 子项目缩写对照、模块边界、内部 RPC 调用约定
+                            # → 多平台/多租户（partner_id 等标识符）设计
+
+24-backend-game.mdx         # 游戏服约定
+                            # → 游戏逻辑模块结构（logic/handler/namespace）
+                            # → 随机数/种子/可验证公平性约定
+                            # → 游戏记录写入规范
+
+25-database-design.mdx      # 数据库设计规范
+                            # → 表命名、字段命名、主键策略
+                            # → 时间字段（created_at/updated_at/UTC）
+                            # → 分库分表、数据生命周期
+
+26-backend-blockchain.mdx   # 区块链/链上交互
+                            # → 钱包/签名约定、链上事件监听、重试与幂等
+                            # → 链上数据与链下数据同步策略
+
+27-backend-gateway.mdx      # 网关/代理层
+                            # → 路由规则、负载均衡、熔断限流
+                            # → 认证透传、Header 约定
+
+28-backend-integration.mdx  # 第三方集成/对接网关
+                            # → 对接方鉴权（API Key/HMAC/JWT）
+                            # → 资金/结算决策树（必须先出决策树）
+                            # → 分层上线方案、PG 矩阵、回滚路径
+
+29-backend-misc.mdx         # 其他后端约定
+                            # → 后台任务/Worker、定时任务
+                            # → 文件存储、对象存储约定
+```
+
+### 30–39 前端核心
+
+```
+30-frontend-react.mdx       # React 项目规范
+                            # → 组件结构（原子/分子/页面）、Props 类型、状态管理
+                            # → Hooks 约定、副作用处理、错误边界
+
+31-frontend-vue.mdx         # Vue 项目规范
+                            # → Composition API / Options API 选用
+                            # → Pinia/Vuex 状态管理约定
+
+32-frontend-admin.mdx       # 管理后台规范
+                            # → 权限控制（按角色/按功能点）
+                            # → 表格/表单/弹窗复用约定
+                            # → 数据审核与操作日志 UI
+
+33-frontend-agent.mdx       # Agent/运营后台规范
+                            # → 区别于管理后台的权限层级
+                            # → 报表/统计组件约定
+
+35-frontend-sveltekit.mdx   # SvelteKit 项目规范
+                            # → 路由约定（load/server/hooks）
+                            # → Svelte 5 Runes 使用规范
+                            # → Tailwind 样式约定
+
+36-frontend-game.mdx        # 游戏前端规范
+                            # → Canvas/WebGL 使用约定
+                            # → 游戏动画、帧率、资源加载
+                            # → Socket 通信状态机
+
+37-frontend-mobile.mdx      # 移动端/PWA 规范
+                            # → 响应式断点、触摸事件
+                            # → PWA 离线策略、Service Worker
+```
+
+### 40–49 质量与运维
+
+```
+40-observability.mdx        # 可观测性
+                            # → 日志（结构化/级别/requestId/脱敏）
+                            # → Metrics（指标命名/采集周期）
+                            # → Trace（链路追踪 / Span 约定）
+
+41-performance.mdx          # 性能规范
+                            # → 接口响应时间目标
+                            # → 数据库慢查询阈值
+                            # → 前端 LCP/CLS/FID 目标
+
+42-api-versioning.mdx       # API 版本管理
+                            # → URL 版本（v1/v2）还是 Header 版本
+                            # → 废弃流程（@deprecated 标注 + 迁移指引）
+                            # → 向后兼容约定
+
+43-release.mdx              # 发布规范
+                            # → 发布流程（构建→测试→审批→上线）
+                            # → 版本号约定（SemVer）
+                            # → 发布检查清单
+
+44-branching.mdx            # 分支策略
+                            # → 主干（main/master）、开发（dev）、特性（feature/*）
+                            # → PR 规范（标题格式/模板/审批人数）
+                            # → Commit Message 格式（Conventional Commits）
+
+45-incident-response.mdx    # 故障响应
+                            # → 告警级别定义（P0/P1/P2）
+                            # → On-call 职责与响应时间
+                            # → 故障复盘模板
+
+46-slo-sli.mdx              # SLO/SLI 定义
+                            # → 服务可用性目标（如 99.9%）
+                            # → 错误率/延迟 SLI 计算方式
+                            # → SLO 违规告警规则
+
+47-secrets-config.mdx       # 密钥与配置管理
+                            # → 密钥读取方式（仅从 .env / Secret Manager）
+                            # → .env.example 维护规范
+                            # → 环境变量命名约定（SERVICE_VAR_NAME）
+
+48-dependency-security.mdx  # 依赖与安全
+                            # → 依赖版本固定策略
+                            # → CVE 扫描频率与修复 SLA
+                            # → 禁用 `latest` 镜像 tag
+
+49-container-iac.mdx        # 容器与基础设施
+                            # → Dockerfile 规范（多阶段构建/非 root 用户）
+                            # → docker-compose 文件命名约定
+                            # → IaC 目录结构（Terraform/Pulumi）
+```
+
+### 50–59 功能治理
+
+```
+51-feature-change-records.mdx   # 功能变更记录
+                                # → CHANGELOG.md / FEATURE_LOG.md 维护
+                                # → 变更类型（新增/修改/废弃/删除）
+                                # → 跨子项目变更通知机制
+
+52-feature-spec-design.mdx      # 功能规格设计
+                                # → 三位一体：客户端 + 管理后台 + 处理接口
+                                # → 功能 PRD 模板
+                                # → 验收标准定义
+
+53-spec-implementation.mdx      # 规格落地追踪
+                                # → 规格与实现的对应关系
+                                # → 未实现项标注（TODO/BLOCKED）
+                                # → 规格变更影响评估
+```
+
+### 60–69 协作与安全
+
+```
+60-code-review.mdx          # 代码审查规范
+                            # → Review 检查清单（逻辑/安全/性能/可读性）
+                            # → LGTM 门槛（几人通过）
+                            # → 自动化 Lint/Test 作为 PR 门禁
+
+61-deployment.mdx           # 部署规范
+                            # → 蓝绿/金丝雀/滚动发布选用
+                            # → 回滚触发条件与步骤
+                            # → 部署后健康检查清单
+
+62-security.mdx             # 安全规范
+                            # → OWASP Top 10 对应防护措施
+                            # → SQL 注入/XSS/CSRF 防护约定
+                            # → 鉴权与权限最小化原则
+```
+
+### 70–79 高阶规范与 AI 工作流
+
+```
+70-testing-advanced.mdx     # 高阶测试规范
+                            # → 单元/集成/E2E 覆盖率目标
+                            # → 测试数据管理（Fixtures/Factories/Seeding）
+                            # → 并发/压力测试约定
+
+71-feature-flags.mdx        # 特性开关
+                            # → 开关命名与管理
+                            # → 灰度放量策略
+                            # → 开关清理机制（避免永久开关积累）
+
+72-docs-governance.mdx      # 文档治理（见同名文件）
+73-code-ownership.mdx       # 代码归属（CODEOWNERS 配置）
+74-data-lifecycle.mdx       # 数据生命周期（归档/清理/合规）
+75-dr-and-cost.mdx          # 灾备与成本优化
+
+76-scripts-and-tools.mdx    # 脚本与工具规范
+                            # → scripts/ 目录约定
+                            # → 可复用脚本登记规则
+                            # → 工具脚本文档要求
+
+77-agent-mcp-workflow.mdx   # Agent MCP 工作流（见同名文件）
+78-memory-bank-workflow.mdx # Memory Bank 工作流（见同名文件）
+
+79-timezone-handling.mdx    # 时区处理规范
+                            # → 存储统一 UTC
+                            # → 展示层转换（用户本地时区）
+                            # → 日志时间戳格式
+```
+
+---
+
+## 三、创建新规则文件的建议结构
+
+```markdown
+# [规则名称]
+
+> **适用范围**：[子项目 / 模块 / 全仓库]
+> **关键约束**：[1-2 句核心约束，帮助快速理解]
+
+---
+
+## 一、[核心规范]
+[具体约束]
+
+## 二、[操作约定]
+[具体约定]
+
+## 三、检查清单（可选）
+- [ ] 约束点 1
+- [ ] 约束点 2
+
+## 四、项目扩展提示（可选）
+[留给使用者的扩展空间说明]
+```
+
+---
+
+## 四、规则文件命名约定
+
+| 前缀范围 | 关注域 |
+|----------|--------|
+| `00–09` | 规则体系元信息（规则映射、加载说明） |
+| `10–19` | 通用编码与架构原则 |
+| `20–29` | 后端核心 |
+| `30–39` | 前端核心 |
+| `40–49` | 质量与运维 |
+| `50–59` | 功能治理 |
+| `60–69` | 协作与安全 |
+| `70–79` | 高阶规范与 AI 工作流 |
+| `80–89` | 预留（项目自定义扩展） |
